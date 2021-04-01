@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\Sale;
+use Illuminate\Support\Facades\Auth;
 
 class ManagementController extends Controller
 {
@@ -16,7 +17,11 @@ class ManagementController extends Controller
      */
     public function index()
     {
-        //
+        if (Auth::check()) {
+            return view('management.index');
+        } else {
+            return view('auth.login');
+        }
     }
 
     /**
