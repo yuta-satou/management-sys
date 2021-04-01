@@ -10,9 +10,9 @@ use App\Models\Sale;
 class ManagementController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * 商品情報の一覧
      *
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function index()
     {
@@ -20,9 +20,9 @@ class ManagementController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 商品情報登録の表示
      *
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function create()
     {
@@ -30,10 +30,10 @@ class ManagementController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 商品情報登録
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  $request
+     * @return view
      */
     public function store(Request $request)
     {
@@ -41,10 +41,10 @@ class ManagementController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * 商品情報の詳細
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function show($id)
     {
@@ -52,10 +52,10 @@ class ManagementController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * 商品情報編集の表示
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function edit($id)
     {
@@ -63,11 +63,11 @@ class ManagementController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * 商品情報の更新
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function update(Request $request, $id)
     {
@@ -75,10 +75,10 @@ class ManagementController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * 商品情報の削除
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return view
      */
     public function destroy($id)
     {
