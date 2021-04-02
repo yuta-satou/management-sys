@@ -17,11 +17,8 @@ class ManagementController extends Controller
      */
     public function index()
     {
-        if (Auth::check()) {
-            return view('management.index');
-        } else {
-            return view('auth.login');
-        }
+
+        return view('management.index');
     }
 
     /**
@@ -31,7 +28,7 @@ class ManagementController extends Controller
      */
     public function create()
     {
-        //
+        return view('management.create');
     }
 
     /**
@@ -53,7 +50,7 @@ class ManagementController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('management.show');
     }
 
     /**
@@ -64,7 +61,7 @@ class ManagementController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('management.edit');
     }
 
     /**
