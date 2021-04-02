@@ -20,7 +20,8 @@ class CreateProductsTable extends Migration
                 $table->string('product_name');
                 $table->integer('price');
                 $table->integer('stock');
-                $table->text('comment');
+                $table->text('comment')->nullable()->change();
+                $table->string('product_image')->nullable()->change();
                 $table->timestamps();
                 $table->foreign('company_id')
                     ->references('id')
