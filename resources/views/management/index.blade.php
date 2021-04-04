@@ -11,6 +11,7 @@
     <p>{{ $product->stock }}</p>
     <p>{{ $product->comment }}</p>
     <p>{{ $product->product_image }}</p>
+    <button type="button" class="btn btn-primary" onclick="location.href='management/{{ $product->id }}'">詳細</button>
     @endforeach
 
 @endsection
