@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Company;
 
 class Product extends Model
 {
@@ -16,4 +17,7 @@ class Product extends Model
         'comment',
         'product_image'
     ];
+    public function company(){
+        return $this->belongsTo('App\Models\Company');
+    }
 }

@@ -19,10 +19,6 @@ Route::post('/management/update', 'ManagementController@update')->name('update')
 Route::get('/management/{id}', 'ManagementController@show')->name('show');
 Route::post('/management/destroy/{id}', 'ManagementController@destroy')->name('destroy');
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

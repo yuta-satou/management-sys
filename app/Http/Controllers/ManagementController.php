@@ -17,8 +17,8 @@ class ManagementController extends Controller
      */
     public function index()
     {
-
-        return view('management.index');
+        $products = Product::all();
+        return view('management.index', ['products' => $products]);
     }
 
     /**
@@ -28,7 +28,8 @@ class ManagementController extends Controller
      */
     public function create()
     {
-        return view('management.create');
+        $companies = Company::all();
+        return view('management.create',['companies' => $companies]);
     }
 
     /**
@@ -39,7 +40,27 @@ class ManagementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $inputs = $request->all();
+        // $inputs = new Product;
+        // $inputs->company_id = $request->companies()->id;
+        // $inputs->product_name = $request->product_name;
+        // $inputs->price = $request->price;
+        // $inputs->stock = $request->stock;
+        // $inputs->comment = $request->comment;
+        // $inputs->product_image = $request->product_image;
+
+        // dd($inputs);
+        \DB::beginTransaction();
+        try{
+            Product::create($inputs);
+            // $inputs->save();
+            \DB::commit();
+        } catch(\Throwable $e){
+            \DB::rollback();
+            abort(500);
+        }
+        return redirect(route('managements'));
+
     }
 
     /**

@@ -7,91 +7,87 @@
             <form method="POST" action="{{ route('store') }}" onSubmit="return checkSubmit()">
                 @csrf
                 <div class="form-group">
-                    <label for="title">
+                    <label for="product_name">
                         商品名
                     </label>
                     <input
-                        id="title"
-                        name="title"
+                        id="product_name"
+                        name="product_name"
                         class="form-control"
-                        value="{{ old('title') }}"
+                        value="{{ old('product_name') }}"
                         type="text"
                     >
-                    @if ($errors->has('title'))
+                    @if ($errors->has('product_name'))
                         <div class="text-danger">
-                            {{ $errors->first('title') }}
+                            {{ $errors->first('product_name') }}
                         </div>
                     @endif
                 </div>
                 <div class="form-group">
-                    <label for="title">
-                        メーカー
+                    <label for="company_id">
+                        メーカー名
                     </label>
                     <select name="company_id">
-                        <option value="1">sony</option>
-                        <option value="2">ダイハツ</option>
+                        @foreach($companies as $company)
+                            <option value="{{ $company->id }}">{{ $company->company_name }}</option>
+                        @endforeach
                     </select>
-                    @if ($errors->has('title'))
+                    @if ($errors->has('company_id"'))
                         <div class="text-danger">
-                            {{ $errors->first('title') }}
+                            {{ $errors->first('company_id"') }}
                         </div>
                     @endif
                 </div>
                 <div class="form-group">
-                    <label for="title">
+                    <label for="price">
                         価格
                     </label>
                     <input
-                        id="title"
-                        name="title"
+                        id="price"
+                        name="price"
                         class="form-control"
-                        value="{{ old('title') }}"
+                        value="{{ old('price') }}"
                         type="text"
                     >
-                    @if ($errors->has('title'))
+                    @if ($errors->has('price'))
                         <div class="text-danger">
-                            {{ $errors->first('title') }}
+                            {{ $errors->first('price') }}
                         </div>
                     @endif
                 </div>
                 <div class="form-group">
-                    <label for="title">
+                    <label for="stock">
                         在庫数
                     </label>
                     <input
-                        id="title"
-                        name="title"
+                        id="stock"
+                        name="stock"
                         class="form-control"
-                        value="{{ old('title') }}"
+                        value="{{ old('stock') }}"
                         type="text"
                     >
-                    @if ($errors->has('title'))
+                    @if ($errors->has('stock'))
                         <div class="text-danger">
-                            {{ $errors->first('title') }}
+                            {{ $errors->first('stock') }}
                         </div>
                     @endif
                 </div>
                 <div class="form-group">
-                    <label for="content">
+                    <label for="comment">
                         コメント
                     </label>
                     <textarea
-                        id="content"
-                        name="content"
+                        id="comment"
+                        name="comment"
                         class="form-control"
                         rows="4"
-                    >{{ old('content') }}</textarea>
-                    @if ($errors->has('content'))
-                        <div class="text-danger">
-                            {{ $errors->first('content') }}
-                        </div>
-                    @endif
+                    >{{ old('comment') }}</textarea>
                 </div>
                 <div class="form-group">
-                    <label for="content">
+                    <label for="product_image">
                         商品画像
                     </label>
-                    <input type="file" id="file" name="file" class="form-control">
+                    <input type="file" id="product_image" name="product_image" class="form-control">
                 </div>
                 <div class="mt-5">
                     <a class="btn btn-secondary" href="{{ route('managements') }}">

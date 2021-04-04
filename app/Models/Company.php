@@ -12,4 +12,7 @@ class Company extends Model
         'company_name',
         'street_address'
     ];
+    public function products(){
+        return  $this->hasMany('App\Models\Product');
+    }
 }

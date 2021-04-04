@@ -16,12 +16,12 @@ class CreateProductsTable extends Migration
         if(!Schema::hasTable('products')){
             Schema::create('products', function (Blueprint $table) {
                 $table->bigIncrements('id');
-                $table->unsignedBigInteger('company_id');
+                $table->integer('company_id')->unsigned();
                 $table->string('product_name');
                 $table->integer('price');
                 $table->integer('stock');
-                $table->text('comment')->nullable()->change();
-                $table->string('product_image')->nullable()->change();
+                $table->text('comment')->nullable();
+                $table->string('product_image')->nullable();
                 $table->timestamps();
                 $table->foreign('company_id')
                     ->references('id')
@@ -39,5 +39,9 @@ class CreateProductsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('products');
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign('products_company_id_foreign');
+        });
     }
 }
