@@ -74,7 +74,9 @@ class ManagementController extends Controller
      */
     public function edit($id)
     {
-        return view('management.edit');
+        $product = Product::find($id);
+        $companies = Company::all();
+        return view('management.edit',['product' => $product],['companies' => $companies]);
     }
 
     /**
@@ -84,9 +86,27 @@ class ManagementController extends Controller
      * @param  int  $id
      * @return view
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $inputs = $request->all();
+        \DB::beginTransaction();
+        try{
+            $product = Product::find($inputs['id']);
+            $product->fill([
+                'company_id' => $inputs['company_id'],
+                'product_name' => $inputs['product_name'],
+                'price' => $inputs['price'],
+                'stock' => $inputs['stock'],
+                'comment' => $inputs['comment'],
+                'product_image' => $inputs['product_image'],
+            ]);
+            $product->save();
+            \DB::commit();
+        } catch(\Throwable $e){
+            \DB::rollback();
+            abort(500);
+        }
+        return redirect(route('managements'));
     }
 
     /**
