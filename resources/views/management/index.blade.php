@@ -5,13 +5,16 @@
     <a href="{{ route('create') }}">商品登録画面</a>
 
     @foreach($products as $product)
-    <p>{{ $product->product_name }}</p>
-    <p>{{ $product->company->company_name }}</p>
-    <p>{{ $product->price }}</p>
-    <p>{{ $product->stock }}</p>
-    <p>{{ $product->comment }}</p>
-    <p>{{ $product->product_image }}</p>
-    <button type="button" class="btn btn-primary" onclick="location.href='management/{{ $product->id }}'">詳細</button>
+        <p>{{ $product->product_name }}</p>
+        <p>{{ $product->company->company_name }}</p>
+        <p>{{ $product->price }}</p>
+        <p>{{ $product->stock }}</p>
+        <p>{{ $product->comment }}</p>
+        <p>{{ $product->product_image }}</p>
+        <button type="button" class="btn btn-primary" onclick="location.href='management/{{ $product->id }}'">詳細</button>
+        <form method="POST" action="{{ route('destroy',$product->id) }}" onSubmit="return checkDelete()">
+            @csrf
+            <button type="submit" class="btn btn-primary" onclick=>削除</button>
+        </form>
     @endforeach
-
 @endsection

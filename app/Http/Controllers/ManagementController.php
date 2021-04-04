@@ -117,6 +117,17 @@ class ManagementController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(empty($id)){
+            //エラーメッセージを送る処理
+            \Session::flash('err_msg','データがありません。');
+            return redirect(route('managements'));
+        }
+        try{
+            Product::destroy($id);
+        } catch(\Throwable $e){
+            abort(500);
+        }
+        \Session::flash('err_msg','削除しました。');
+        return redirect(route('managements'));
     }
 }
