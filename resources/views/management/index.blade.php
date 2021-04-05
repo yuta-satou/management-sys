@@ -10,7 +10,7 @@
         <p>{{ $product->price }}</p>
         <p>{{ $product->stock }}</p>
         <p>{{ $product->comment }}</p>
-        <p>{{ $product->product_image }}</p>
+        <img src="{{ asset('storage/' . $product['product_image']) }}" width="250" height="200">
         <button type="button" class="btn btn-primary" onclick="location.href='management/{{ $product->id }}'">詳細</button>
         <form method="POST" action="{{ route('destroy',$product->id) }}" onSubmit="return checkDelete()">
             @csrf

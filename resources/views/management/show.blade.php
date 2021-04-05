@@ -8,7 +8,7 @@
     <p>価格：{{ $product->price }}</p>
     <p>在庫：{{ $product->stock }}</p>
     <p>コメント：{{ $product->comment }}</p>
-    <p>商品画像：</p><img src="{{ $product->product_image }}" alt="画像">
+    <p>商品画像：</p><img src="{{ asset('storage/' . $product['product_image']) }}" width="250" height="200">
     <button type="button" class="btn btn-primary" onclick="location.href='edit/{{ $product->id }}'">編集</button>
     <a href="{{ route('managements') }}">戻る</a>
 

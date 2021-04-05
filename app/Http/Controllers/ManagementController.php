@@ -40,11 +40,19 @@ class ManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $inputs = $request->all();
-        // dd($inputs);
+        $path = $request->file('product_image')->store('public');
+        $file_name = basename($path);
+        $inputs = new Product();
+        $inputs->company_id = $request->company_id;
+        $inputs->product_name = $request->product_name;
+        $inputs->price = $request->price;
+        $inputs->stock = $request->stock;
+        $inputs->comment = $request->comment;
+        $inputs->product_image = $file_name;
+
         \DB::beginTransaction();
         try{
-            Product::create($inputs);
+            $inputs->save();
             \DB::commit();
         } catch(\Throwable $e){
             \DB::rollback();
@@ -88,17 +96,19 @@ class ManagementController extends Controller
      */
     public function update(Request $request)
     {
-        $inputs = $request->all();
+        // $inputs = $request->all();
+        $path = $request->file('product_image')->store('public');
+        $file_name = basename($path);
         \DB::beginTransaction();
         try{
-            $product = Product::find($inputs['id']);
+            $product = Product::find($request->id);
             $product->fill([
-                'company_id' => $inputs['company_id'],
-                'product_name' => $inputs['product_name'],
-                'price' => $inputs['price'],
-                'stock' => $inputs['stock'],
-                'comment' => $inputs['comment'],
-                'product_image' => $inputs['product_image'],
+                'company_id' => $request->company_id,
+                'product_name' => $request->product_name,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'comment' => $request->comment,
+                'product_image' => $file_name,
             ]);
             $product->save();
             \DB::commit();
