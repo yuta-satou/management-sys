@@ -13,12 +13,16 @@ class ManagementController extends Controller
     /**
      * 商品情報の一覧
      *
+     * @param  $request
      * @return view
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('management.index', ['products' => $products]);
+        //商品検索
+        $products = self::search($request);
+        $companies = Company::all();
+        return view('management.index')->with('products',$products)
+        ->with('companies',$companies);
     }
 
     /**
@@ -40,15 +44,17 @@ class ManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $path = $request->file('product_image')->store('public');
-        $file_name = basename($path);
         $inputs = new Product();
         $inputs->company_id = $request->company_id;
         $inputs->product_name = $request->product_name;
         $inputs->price = $request->price;
         $inputs->stock = $request->stock;
         $inputs->comment = $request->comment;
-        $inputs->product_image = $file_name;
+        if($request->product_image){
+            $path = $request->file('product_image')->store('public');
+            $file_name = basename($path);
+            $inputs->product_image = $file_name;
+        }
 
         \DB::beginTransaction();
         try{
@@ -91,12 +97,10 @@ class ManagementController extends Controller
      * 商品情報の更新
      *
      * @param  Request  $request
-     * @param  int  $id
      * @return view
      */
     public function update(Request $request)
     {
-        // $inputs = $request->all();
         $path = $request->file('product_image')->store('public');
         $file_name = basename($path);
         \DB::beginTransaction();
@@ -140,4 +144,27 @@ class ManagementController extends Controller
         \Session::flash('err_msg','削除しました。');
         return redirect(route('managements'));
     }
+
+
+    /**
+     * 商品情報の検索
+     *
+     * @param  $request
+     * @return $products
+     */
+    public function search($request){
+        $query = Product::query();
+        $keyword = $request->input('keyword');
+        $company_id = $request->input('company_id');
+        if(!empty($keyword)){
+            $query->where('product_name', 'LIKE','%'.$keyword.'%');
+        }
+        if(!empty($company_id) && $company_id != 0){
+            $query->where('company_id', $company_id);
+        }
+        $products = $query->get();
+
+        return $products;
+    }
+
 }
