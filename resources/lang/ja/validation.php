@@ -102,7 +102,9 @@ return [
     'required_with_all'    => ':valuesを指定する場合は、:attributeも指定してください。',
     'required_without'     => ':valuesを指定しない場合は、:attributeを指定してください。',
     'required_without_all' => ':valuesのどれも指定しない場合は、:attributeを指定してください。',
+    'reset'                => 'パスワードをリセットしました。',
     'same'                 => ':attributeと:otherには同じ値を指定してください。',
+    'sent'                 => 'パスワードリセットメールを送信しました。',
     'size'                 => [
         'numeric' => ':attributeは:sizeを指定してください。',
         'file'    => ':attributeのファイルは、:sizeキロバイトでなくてはなりません。',
@@ -111,10 +113,13 @@ return [
     ],
     'starts_with'          => ':attributeには、:valuesのどれかで始まる値を指定してください。',
     'string'               => ':attributeは文字列を指定してください。',
+    'throttled'            => 'しばらく待ってから再度お試しください。',
     'timezone'             => ':attributeには、有効なゾーンを指定してください。',
+    'token'                => 'このパスワードリセットトークンは無効です。',
     'unique'               => ':attributeの値は既に存在しています。',
     'uploaded'             => ':attributeのアップロードに失敗しました。',
     'url'                  => ':attributeに正しい形式を指定してください。',
+    'user'                 => 'メールアドレスに一致するユーザーは存在していません。',
     'uuid'                 => ':attributeに有効なUUIDを指定してください。',
 
     /*
@@ -146,9 +151,10 @@ return [
     */
 
     'attributes' => [
-        'product_name' => '商品名',
-        'price' => '価格',
-        'stock' => '在庫数',
+        "name" => "氏名",
+        "email" => "メールアドレス",
+        "password" => "パスワード",
+        "password_confirmation" => "パスワード(確認用)",
     ],
 
 ];
