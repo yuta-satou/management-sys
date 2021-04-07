@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\ProductRequest;
 use App\Models\Company;
 use App\Models\Product;
 use App\Models\Sale;
@@ -42,7 +43,7 @@ class ManagementController extends Controller
      * @param  $request
      * @return view
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
         $inputs = new Product();
         $inputs->company_id = $request->company_id;
@@ -99,7 +100,7 @@ class ManagementController extends Controller
      * @param  Request  $request
      * @return view
      */
-    public function update(Request $request)
+    public function update(ProductRequest $request)
     {
         \DB::beginTransaction();
         try{
