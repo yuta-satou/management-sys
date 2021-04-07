@@ -64,8 +64,8 @@ class ManagementController extends Controller
             \DB::rollback();
             abort(500);
         }
+        \Session::flash('err_msg','商品情報を登録しました。');
         return redirect(route('managements'));
-
     }
 
     /**
@@ -101,18 +101,20 @@ class ManagementController extends Controller
      */
     public function update(Request $request)
     {
-        $path = $request->file('product_image')->store('public');
-        $file_name = basename($path);
         \DB::beginTransaction();
         try{
             $product = Product::find($request->id);
+            if($request->product_image){
+                $path = $request->file('product_image')->store('public');
+                $file_name = basename($path);
+                $product->fill(['product_image' => $file_name]);
+            }
             $product->fill([
                 'company_id' => $request->company_id,
                 'product_name' => $request->product_name,
                 'price' => $request->price,
                 'stock' => $request->stock,
                 'comment' => $request->comment,
-                'product_image' => $file_name,
             ]);
             $product->save();
             \DB::commit();
@@ -120,6 +122,7 @@ class ManagementController extends Controller
             \DB::rollback();
             abort(500);
         }
+        \Session::flash('err_msg','商品情報を更新しました。');
         return redirect(route('managements'));
     }
 
