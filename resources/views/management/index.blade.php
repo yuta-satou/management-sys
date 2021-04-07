@@ -4,7 +4,6 @@
     <h2>商品一覧</h2>
     <a href="{{ route('create') }}">商品新規登録画面</a>
 
-    <h2>商品検索</h2>
     <form method="GET" action="{{ route('managements') }}">
         <input type="text" name="keyword" placeholder="キーワードを入力" >
         <select name="company_id">
