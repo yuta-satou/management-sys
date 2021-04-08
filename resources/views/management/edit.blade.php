@@ -1,9 +1,11 @@
 @extends('layouts.app')
 @section('title', '商品情報詳細')
 @section('content')
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <h2>商品編集フォーム</h2>
+    <div class="offset-sm-5">
+        <h2>商品編集フォーム</h2>
+    </div>
+    <div class="offset-sm-3">
+        <div class="col-md-9 col-md-offset-1">
             <form method="POST" action="{{ route('update') }}" onSubmit="return checkSubmit(update_msg)" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="{{ $product->id }}">
                 @csrf
