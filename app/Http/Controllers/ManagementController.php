@@ -167,7 +167,6 @@ class ManagementController extends Controller
             $query->where('company_id', $company_id);
         }
         $products = $query->get();
-
         return $products;
     }
 

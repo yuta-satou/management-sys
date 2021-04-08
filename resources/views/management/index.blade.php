@@ -2,9 +2,9 @@
 @section('title', '商品一覧')
 @section('content')
     <div class="text-md-center">
-        <h2>商品一覧</h2>
-        <a href="{{ route('create') }}">商品新規登録画面</a>
+        <h2 class="title">商品一覧</h2>
     </div>
+    <div class="text-md-right"><a href="{{ route('create') }}">商品新規登録画面</a></div>
     <div class="text-md-center">
         <form method="GET" action="{{ route('managements') }}">
             <input type="text" name="keyword" placeholder="キーワードを入力" >
@@ -42,8 +42,20 @@
                 <td>{{ $product->company->company_name }}</td>
                 <td>{{ $product->price }}</td>
                 <td>{{ $product->stock }}</td>
-                <td>{{ $product->comment }}</td>
-                <td><img src="{{ asset('storage/' . $product['product_image']) }}" width="150" height="100"></td>
+                <td>
+                    @if ($product->comment)
+                        {{ $product->comment }}
+                    @else
+                        なし
+                    @endif
+                </td>
+                <td>
+                    @if ($product->product_image)
+                        <img src="{{ asset('storage/' . $product['product_image']) }}" width="150" height="100">
+                    @else
+                        画像なし
+                    @endif
+                </td>
                 <td><button type="button" class="btn btn-primary" onclick="location.href='management/{{ $product->id }}'">詳細</button></td>
                 <td>
                     <form method="POST" action="{{ route('destroy',$product->id) }}" onSubmit="return checkSubmit(delete_msg)">
@@ -55,5 +67,4 @@
             @endforeach
         </table>
     </div>
-
 @endsection

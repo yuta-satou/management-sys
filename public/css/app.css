@@ -91,7 +91,8 @@ h3,
 h4,
 h5,
 h6 {
-  margin-top: 0;
+  /* margin-top: 0; */
+  padding-top: 10px;
   margin-bottom: 0.5rem;
 }
 
@@ -582,7 +583,6 @@ pre code {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
-  margin-left: auto;
 }
 
 @media (min-width: 576px) {
@@ -10941,4 +10941,5 @@ a.text-dark:focus {
     border-color: #dee2e6;
   }
 }
+
 

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 @section('title', '商品情報詳細')
 @section('content')
-    <div class="offset-sm-5">
+    <div class="offset-sm-6">
         <h2>商品編集フォーム</h2>
     </div>
-    <div class="offset-sm-3">
-        <div class="col-md-9 col-md-offset-1">
+    <div class="offset-sm-4">
+        <div class="col-md-11 col-md-offset-1">
             <form method="POST" action="{{ route('update') }}" onSubmit="return checkSubmit(update_msg)" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="{{ $product->id }}">
                 @csrf
@@ -18,8 +18,7 @@
                         name="product_name"
                         class="form-control"
                         value="{{ $product->product_name }}"
-                        type="text"
-                    >
+                        type="text">
                     @if ($errors->has('product_name'))
                         <div class="text-danger">
                             {{ $errors->first('product_name') }}
@@ -54,8 +53,7 @@
                         name="price"
                         class="form-control"
                         value="{{ $product->price }}"
-                        type="text"
-                    >
+                        type="text">
                     @if ($errors->has('price'))
                         <div class="text-danger">
                             {{ $errors->first('price') }}
@@ -71,8 +69,7 @@
                         name="stock"
                         class="form-control"
                         value="{{ $product->stock }}"
-                        type="text"
-                    >
+                        type="text">
                     @if ($errors->has('stock'))
                         <div class="text-danger">
                             {{ $errors->first('stock') }}
@@ -87,8 +84,8 @@
                         id="comment"
                         name="comment"
                         class="form-control"
-                        rows="4"
-                    >{{ $product->comment }}</textarea>
+                        rows="4">{{ $product->comment }}
+                    </textarea>
                 </div>
                 <div class="form-group">
                     <label for="product_image">
