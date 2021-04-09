@@ -22,6 +22,8 @@ class ManagementController extends Controller
         //商品検索
         $products = self::search($request);
         $companies = Company::all();
+        // $json = ["products" => $products];
+        // return response()->json($json);
         return view('management.index')->with('products',$products)
         ->with('companies',$companies);
     }
@@ -78,6 +80,11 @@ class ManagementController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
+        if(empty($product->id)){
+            //エラーメッセージを送る処理
+            \Session::flash('err_msg','データがありません。');
+            return redirect(route('managements'));
+        }
         return view('management.show',['product' => $product]);
     }
 
@@ -90,6 +97,11 @@ class ManagementController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
+        if(empty($product->id)){
+            //エラーメッセージを送る処理
+            \Session::flash('err_msg','データがありません。');
+            return redirect(route('managements'));
+        }
         $companies = Company::all();
         return view('management.edit',['product' => $product],['companies' => $companies]);
     }

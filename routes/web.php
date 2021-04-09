@@ -11,11 +11,14 @@
 |
 */
 
-Route::get('/','ManagementController@index')->name('managements')->middleware('auth');
-Route::get('/management/create', 'ManagementController@create')->name('create');
-Route::post('/management/store', 'ManagementController@store')->name('store');
-Route::get('/management/edit/{id}', 'ManagementController@edit')->name('edit');
-Route::post('/management/update', 'ManagementController@update')->name('update');
-Route::get('/management/{id}', 'ManagementController@show')->name('show');
-Route::post('/management/destroy/{id}', 'ManagementController@destroy')->name('destroy');
+Route::group(['middleware' => ['auth']], function () {
+    Route::get('/','ManagementController@index')->name('managements');
+    Route::get('/management/create', 'ManagementController@create')->name('create');
+    Route::post('/management/store', 'ManagementController@store')->name('store');
+    Route::get('/management/edit/{id}', 'ManagementController@edit')->name('edit');
+    Route::post('/management/update', 'ManagementController@update')->name('update');
+    Route::get('/management/{id}', 'ManagementController@show')->name('show');
+    Route::post('/management/destroy/{id}', 'ManagementController@destroy')->name('destroy');
+
+});
 Auth::routes();
