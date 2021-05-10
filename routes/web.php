@@ -18,7 +18,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/management/edit/{id}', 'ManagementController@edit')->name('edit');
     Route::post('/management/update', 'ManagementController@update')->name('update');
     Route::get('/management/{id}', 'ManagementController@show')->name('show');
-    Route::post('/management/destroy/{id}', 'ManagementController@destroy')->name('destroy');
-
+    Route::get('/management/destroy/{id}', 'ManagementController@destroy');
+    Route::get('/management/index/{keyword}/{search_id}/{min_price}/{max_price}/{min_stock}/{max_stock}','ManagementController@getKeyword');
+    Route::get('/management/sort/{get_sort}/{sort_list}','ManagementController@getSort');
+    Route::post('/management/pay/{id}','ManagementController@pay');
 });
 Auth::routes();

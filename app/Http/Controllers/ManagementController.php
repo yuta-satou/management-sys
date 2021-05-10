@@ -8,6 +8,11 @@ use App\Models\Company;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Support\Facades\Auth;
+use Stripe\Stripe;
+use Stripe\Customer;
+use Stripe\Charge;
+
+
 
 class ManagementController extends Controller
 {
@@ -19,13 +24,23 @@ class ManagementController extends Controller
      */
     public function index(Request $request)
     {
-        //商品検索
-        $products = self::search($request);
+        $products = Product::all();
         $companies = Company::all();
-        // $json = ["products" => $products];
-        // return response()->json($json);
-        return view('management.index')->with('products',$products)
-        ->with('companies',$companies);
+        $price = 0;
+        $stock = 0;
+        foreach($products as $product){
+            if($price < $product->price){
+                $price = $product->price;
+            }
+        }
+        foreach($products as $product){
+            if($stock < $product->stock){
+                $stock = $product->stock;
+            }
+        }
+        return view('management.index',compact('products'))
+        ->with('companies',$companies)->with('price',$price)
+        ->with('stock',$stock);
     }
 
     /**
@@ -158,7 +173,11 @@ class ManagementController extends Controller
             abort(500);
         }
         \Session::flash('err_msg','削除しました。');
-        return redirect(route('managements'));
+        $products = Product::all();
+        $json[] = $products;
+        $companies = Company::all();
+        $json[] = $companies;
+        return response()->json($json);
     }
 
 
@@ -166,20 +185,70 @@ class ManagementController extends Controller
      * 商品情報の検索
      *
      * @param  $request
+     * @return $json
+     */
+    public function getKeyword($keyword,$search_id,$min_price,$max_price,$min_stock,$max_stock){
+        $query = Product::query();
+        $products = $query->where('product_name', 'LIKE','%'.$keyword.'%')
+        ->orWhere('company_id', $search_id)->orWhereBetween('price', [$min_price, $max_price])
+        ->orWhereBetween('stock', [$min_stock, $max_stock])->get();
+
+        $json[] = $products;
+        $companies = Company::all();
+        $json[] = $companies;
+        return response()->json($json);
+    }
+
+
+   /**
+     * 商品情報のソート
+     *
+     * @param  $get_sort, $sort_list
      * @return $products
      */
-    public function search($request){
+    public function getSort($get_sort, $sort_list){
         $query = Product::query();
-        $keyword = $request->input('keyword');
-        $company_id = $request->input('company_id');
-        if(!empty($keyword)){
-            $query->where('product_name', 'LIKE','%'.$keyword.'%');
+        if($get_sort == 'asc'){
+            $products = $query->orderBy($sort_list, 'desc')->get();
         }
-        if(!empty($company_id) && $company_id != 0){
-            $query->where('company_id', $company_id);
+        if($get_sort == 'desc'){
+            $products = $query->orderBy($sort_list, 'asc')->get();
         }
-        $products = $query->get();
-        return $products;
+        $json[] = $products;
+        $companies = Company::all();
+        $json[] = $companies;
+        return response()->json($json);
+    }
+
+
+    /**
+     * 商品の決済
+     *
+     * @param  int  $id $request
+     * @return view
+     */
+    public function pay(Request $request, $id)
+    {
+        $product = Product::find($id);
+        if($product->stock > 0){
+            Stripe::setApiKey(env('STRIPE_SECRET'));
+            $charge = Charge::create(array(
+                'amount' => $product->price,
+                'currency' => 'jpy',
+                'source'=> request()->stripeToken,
+            ));
+
+            $product->stock--;
+            $product->save();
+            $sale = new Sale();
+            $sale->product_id = $product->id;
+            $sale->save();
+            \DB::commit();
+
+        }else{
+            \Session::flash('err_msg','商品の在庫がありません。');
+        }
+        return redirect(route('show', ['id'=> $product->id]));
     }
 
 }

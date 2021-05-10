@@ -91,8 +91,7 @@ h3,
 h4,
 h5,
 h6 {
-  /* margin-top: 0; */
-  padding-top: 10px;
+  margin-top: 20px;
   margin-bottom: 0.5rem;
 }
 
@@ -583,6 +582,7 @@ pre code {
   padding-right: 15px;
   padding-left: 15px;
   margin-right: auto;
+  margin-left: auto;
 }
 
 @media (min-width: 576px) {
@@ -10656,6 +10656,7 @@ button.bg-dark:focus {
 
   .text-md-center {
     text-align: center !important;
+    margin-bottom: 20px;
   }
 }
 
@@ -10941,5 +10942,4 @@ a.text-dark:focus {
     border-color: #dee2e6;
   }
 }
-
 

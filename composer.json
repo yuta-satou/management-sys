@@ -10,6 +10,8 @@
     "require": {
         "php": "^7.2.5|^8.0",
         "fideloper/proxy": "^4.4",
+        "kyslik/column-sortable": "^6.4",
+        "laravel/cashier": "^12.13",
         "laravel/framework": "^6.20",
         "laravel/tinker": "^2.5"
     },

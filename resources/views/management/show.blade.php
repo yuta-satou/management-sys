@@ -3,7 +3,13 @@
 @section('content')
     <div class="text-md-center">
         <h2>商品情報詳細</h2>
+        @if (session('err_msg'))
+        <p class="alert-link">
+            {{ session('err_msg') }}
+        </p>
+    @endif
     </div>
+
     <div class="col-md-10 offset-sm-4">
         <h3>No.{{ $product->id }}</h3>
         @if ($product->product_image)
@@ -24,5 +30,19 @@
         </p>
         <button type="button" class="btn btn-primary" onclick="location.href='edit/{{ $product->id }}'">編集</button>
         <a href="{{ route('managements') }}">戻る</a>
+        <form action="pay/{{ $product->id }}" method="POST">
+            {{ csrf_field() }}
+            <script
+                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                data-key="{{ env('STRIPE_KEY') }}"
+                data-amount="{{ $product->price }}"
+                data-name="{{ $product->product_name }}"
+                data-label="決済をする"
+                data-description="決済しますか"
+                data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                data-locale="auto"
+                data-currency="JPY">
+            </script>
+        </form>
     </div>
 @endsection
