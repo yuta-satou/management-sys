@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Stripe\Stripe;
 use Stripe\Customer;
 use Stripe\Charge;
+use App\Config;
 
 
 
@@ -26,18 +27,8 @@ class ManagementController extends Controller
     {
         $products = Product::all();
         $companies = Company::all();
-        $price = 0;
-        $stock = 0;
-        foreach($products as $product){
-            if($price < $product->price){
-                $price = $product->price;
-            }
-        }
-        foreach($products as $product){
-            if($stock < $product->stock){
-                $stock = $product->stock;
-            }
-        }
+        $price = Product::priceConstruct($products);
+        $stock = Product::stockConstruct($products);
         return view('management.index',compact('products'))
         ->with('companies',$companies)->with('price',$price)
         ->with('stock',$stock);
@@ -62,18 +53,7 @@ class ManagementController extends Controller
      */
     public function store(ProductRequest $request)
     {
-        $inputs = new Product();
-        $inputs->company_id = $request->company_id;
-        $inputs->product_name = $request->product_name;
-        $inputs->price = $request->price;
-        $inputs->stock = $request->stock;
-        $inputs->comment = $request->comment;
-        if($request->product_image){
-            $path = $request->file('product_image')->store('public');
-            $file_name = basename($path);
-            $inputs->product_image = $file_name;
-        }
-
+        $inputs = Product::newProduct($request);
         \DB::beginTransaction();
         try{
             $inputs->save();
@@ -82,7 +62,7 @@ class ManagementController extends Controller
             \DB::rollback();
             abort(500);
         }
-        \Session::flash('err_msg','商品情報を登録しました。');
+        \Session::flash('err_msg', config('message.Managements.REGISTRATION_MSG'));
         return redirect(route('managements'));
     }
 
@@ -97,7 +77,7 @@ class ManagementController extends Controller
         $product = Product::find($id);
         if(empty($product->id)){
             //エラーメッセージを送る処理
-            \Session::flash('err_msg','データがありません。');
+            \Session::flash('err_msg', config('message.Managements.DATE_MSG'));
             return redirect(route('managements'));
         }
         return view('management.show',['product' => $product]);
@@ -114,7 +94,7 @@ class ManagementController extends Controller
         $product = Product::find($id);
         if(empty($product->id)){
             //エラーメッセージを送る処理
-            \Session::flash('err_msg','データがありません。');
+            \Session::flash('err_msg', config('message.Managements.DATE_MSG'));
             return redirect(route('managements'));
         }
         $companies = Company::all();
@@ -131,26 +111,13 @@ class ManagementController extends Controller
     {
         \DB::beginTransaction();
         try{
-            $product = Product::find($request->id);
-            if($request->product_image){
-                $path = $request->file('product_image')->store('public');
-                $file_name = basename($path);
-                $product->fill(['product_image' => $file_name]);
-            }
-            $product->fill([
-                'company_id' => $request->company_id,
-                'product_name' => $request->product_name,
-                'price' => $request->price,
-                'stock' => $request->stock,
-                'comment' => $request->comment,
-            ]);
-            $product->save();
+            $product = Product::updateProduct($request);
             \DB::commit();
         } catch(\Throwable $e){
             \DB::rollback();
             abort(500);
         }
-        \Session::flash('err_msg','商品情報を更新しました。');
+        \Session::flash('err_msg', config('message.Managements.UPDATE_MSG'));
         return redirect(route('managements'));
     }
 
@@ -164,7 +131,7 @@ class ManagementController extends Controller
     {
         if(empty($id)){
             //エラーメッセージを送る処理
-            \Session::flash('err_msg','データがありません。');
+            \Session::flash('err_msg', config('message.Managements.DATE_MSG'));
             return redirect(route('managements'));
         }
         try{
@@ -172,7 +139,7 @@ class ManagementController extends Controller
         } catch(\Throwable $e){
             abort(500);
         }
-        \Session::flash('err_msg','削除しました。');
+        \Session::flash('err_msg', config('message.Managements.DELETE_MSG'));
         $products = Product::all();
         $json[] = $products;
         $companies = Company::all();
@@ -188,11 +155,9 @@ class ManagementController extends Controller
      * @return $json
      */
     public function getKeyword($keyword,$search_id,$min_price,$max_price,$min_stock,$max_stock){
-        $query = Product::query();
-        $products = $query->where('product_name', 'LIKE','%'.$keyword.'%')
-        ->orWhere('company_id', $search_id)->orWhereBetween('price', [$min_price, $max_price])
-        ->orWhereBetween('stock', [$min_stock, $max_stock])->get();
-
+        $products = Product::Search($keyword,$search_id,$min_price,
+                                    $max_price,$min_stock,$max_stock
+                                    );
         $json[] = $products;
         $companies = Company::all();
         $json[] = $companies;
@@ -207,13 +172,7 @@ class ManagementController extends Controller
      * @return $products
      */
     public function getSort($get_sort, $sort_list){
-        $query = Product::query();
-        if($get_sort == 'asc'){
-            $products = $query->orderBy($sort_list, 'desc')->get();
-        }
-        if($get_sort == 'desc'){
-            $products = $query->orderBy($sort_list, 'asc')->get();
-        }
+        $products = Product::Sort($get_sort, $sort_list);
         $json[] = $products;
         $companies = Company::all();
         $json[] = $companies;
@@ -240,13 +199,11 @@ class ManagementController extends Controller
 
             $product->stock--;
             $product->save();
-            $sale = new Sale();
-            $sale->product_id = $product->id;
-            $sale->save();
+            Sale::newSale($product->id);
             \DB::commit();
 
         }else{
-            \Session::flash('err_msg','商品の在庫がありません。');
+            \Session::flash('err_msg',config('message.Managements.STOCK_MSG'));
         }
         return redirect(route('show', ['id'=> $product->id]));
     }
