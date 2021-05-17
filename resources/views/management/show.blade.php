@@ -4,7 +4,7 @@
     <div class="text-md-center">
         <h2>商品情報詳細</h2>
         @if (session('err_msg'))
-        <p class="alert-link">
+        <p class="text-danger">
             {{ session('err_msg') }}
         </p>
     @endif

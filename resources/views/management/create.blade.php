@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('title', '商品登録フォーム')
 @section('content')
-    <div class="offset-sm-6">
+    <div class="offset-sm-5">
         <h2>商品登録フォーム</h2>
     </div>
-    <div class="offset-sm-4">
+    <div class="offset-sm-3">
         <div class="col-md-11 col-md-offset-1">
             <form method="POST" action="{{ route('store') }}" onSubmit="return checkSubmit(create_msg)" enctype="multipart/form-data">
                 @csrf
