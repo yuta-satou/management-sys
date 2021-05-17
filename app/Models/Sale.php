@@ -11,4 +11,10 @@ class Sale extends Model
     protected $fillable = [
         'product_id'
     ];
+
+    public static function newSale($id){
+        $sale = new Sale();
+        $sale->product_id = $id;
+        $sale->save();
+    }
 }
