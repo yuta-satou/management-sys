@@ -2,7 +2,7 @@
 @section('title', '商品情報詳細')
 @section('content')
     <div class="offset-sm-6">
-        <h2>商品編集フォーム</h2>
+        <h2>商品編集フォーム(edit)</h2>
     </div>
     <div class="offset-sm-4">
         <div class="col-md-11 col-md-offset-1">
